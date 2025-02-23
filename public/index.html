@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Press Game</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #game-container { margin-top: 50px; display: none; }
+        button { font-size: 24px; padding: 10px 20px; cursor: pointer; }
+        #winner { font-size: 30px; color: green; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Quick Press Game</h1>
+    <div id="name-container">
+        <input type="text" id="playerName" placeholder="Enter your name">
+        <button id="joinButton">Join</button>
+    </div>
+    <div id="game-container">
+        <button id="pressButton">PRESS ME!</button>
+        <p id="winner"></p>
+    </div>
+
+    <script>
+        const socket = io();
+        let playerName = "";
+
+        document.getElementById("joinButton").addEventListener("click", function() {
+            playerName = document.getElementById("playerName").value.trim();
+            if (!playerName) {
+                alert("Please enter your name!");
+                return;
+            }
+            console.log("Joining game with name:", playerName); // Debugging
+            socket.emit("setName", playerName);
+            document.getElementById("name-container").style.display = "none";
+            document.getElementById("game-container").style.display = "block";
+        });
+
+        document.getElementById("pressButton").addEventListener("click", () => {
+            console.log("Button pressed by:", playerName); // Debugging
+            socket.emit("pressButton");
+        });
+
+        socket.on("winnerDeclared", (winner) => {
+            document.getElementById("winner").textContent = `Winner: ${winner}`;
+        });
+
+        socket.on("resetGame", () => {
+            document.getElementById("winner").textContent = "";
+        });
+    </script>
+</body>
+</html>
