@@ -24,7 +24,7 @@
     </div>
 
     <script>
-        const socket = io();
+        const socket = io("https://song-buzzer.onrender.com"); 
         let playerName = "";
 
         document.getElementById("joinButton").addEventListener("click", function() {
@@ -33,14 +33,14 @@
                 alert("Please enter your name!");
                 return;
             }
-            console.log("Joining game with name:", playerName); // Debugging
+            console.log("Joining game with name:", playerName); 
             socket.emit("setName", playerName);
             document.getElementById("name-container").style.display = "none";
             document.getElementById("game-container").style.display = "block";
         });
 
         document.getElementById("pressButton").addEventListener("click", () => {
-            console.log("Button pressed by:", playerName); // Debugging
+            console.log("Button pressed by:", playerName); 
             socket.emit("pressButton");
         });
 
