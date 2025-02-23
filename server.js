@@ -7,17 +7,16 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
     cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
+        origin: "*", 
     }
 });
 
-app.use(cors()); 
+app.use(cors());
 
 let winner = null;
 
 io.on("connection", (socket) => {
-    console.log("User connected");
+    console.log("A user connected");
 
     socket.on("setName", (name) => {
         socket.username = name;
@@ -35,11 +34,11 @@ io.on("connection", (socket) => {
     });
 
     socket.on("disconnect", () => {
-        console.log("User disconnected");
+        console.log("A user disconnected");
     });
 });
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4000; 
 server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
